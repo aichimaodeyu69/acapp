@@ -1,5 +1,5 @@
-export class AcGame(id){
-    constructor(id){
-        
+class AcGame {
+    constructor(id) {
     }
 }
+
