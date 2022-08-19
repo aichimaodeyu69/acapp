@@ -263,7 +263,7 @@ class Player extends AcGameObject{
         this.damage_x = Math.cos(angel);
         this.damage_y = Math.sin(angel);
         this.damage_speed=damage*100;
-        this.speed *=0.8;
+        this.speed *=1.2;
 
         
 
@@ -271,9 +271,11 @@ class Player extends AcGameObject{
 
     update(){
         this.spent_time+=this.timedelta/1000;
-        if(this.spent_time>4&&Math.random()<1/180){
+        if(!this.is_me&&this.spent_time>4&&Math.random()<1/180){
             let player =this.playground.players[0];
-            this.shoot_fireball(player.x,player.y);
+            let tx = player.x + player.speed*player.vx*player.timedelta/1000*0.3;
+            let ty = player.y + player.speed*player.vy*player.timedelta/1000*0.3;
+            this.shoot_fireball(tx,ty);
         }
 
         if(this.damage_speed>10){
@@ -309,6 +311,12 @@ class Player extends AcGameObject{
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
     }
+
+    on_destroy(){
+        for(let i=0;i<this.playground.players.length;i++){
+            if(this.playground.players[i]==this) this.playground.players.splice(i,1);
+        }
+    }
 }
 class FireBall extends AcGameObject{
     constructor(playground,player,x,y,radius,vx,vy,color,speed,move_length,damage){
@@ -335,9 +343,9 @@ class FireBall extends AcGameObject{
         return Math.sqrt(dx*dx+dy*dy);
     }
 
-    iscollision(player){
-        let distance = this.get_dist(this.x,this.y,player.x,player.y);
-        if(distance<this.radius+player.radius) return true;
+    iscollision(obj){
+        let distance = this.get_dist(this.x,this.y,obj.x,obj.y);
+        if(distance<this.radius+obj.radius) return true;
         else return false;
     }
 

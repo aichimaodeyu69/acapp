@@ -23,9 +23,9 @@ class FireBall extends AcGameObject{
         return Math.sqrt(dx*dx+dy*dy);
     }
 
-    iscollision(player){
-        let distance = this.get_dist(this.x,this.y,player.x,player.y);
-        if(distance<this.radius+player.radius) return true;
+    iscollision(obj){
+        let distance = this.get_dist(this.x,this.y,obj.x,obj.y);
+        if(distance<this.radius+obj.radius) return true;
         else return false;
     }
 
